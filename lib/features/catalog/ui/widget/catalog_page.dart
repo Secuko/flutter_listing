@@ -37,9 +37,23 @@ class ProductCatalogView extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: 'Update',
+            tooltip: 'Обновить',
             onPressed: () {
               context.read<CatalogBloc>().add(const CatalogEventRefreshData());
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: 'Загрузить ещё',
+            onPressed: () {
+              context.read<CatalogBloc>().add(const CatalogEventLoadMore());
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            tooltip: 'Очистить',
+            onPressed: () {
+              context.read<CatalogBloc>().add(const CatalogEventClear());
             },
           ),
         ],
@@ -52,7 +66,10 @@ class ProductCatalogView extends StatelessWidget {
             return Center(
               child: Text('Ошибка: ${state.error ?? "Неизвестная ошибка"}'),
             );
-          } else if (state.isSuccess && state.data.products.isEmpty) {
+          } else if (state.isEmpty) {
+            return const Center(child: Text('Вы очистили каталог'));
+          }
+          else if (state.isSuccess && state.data.products.isEmpty) {
             return const Center(child: Text('Нет товаров для отображения.'));
           }
 

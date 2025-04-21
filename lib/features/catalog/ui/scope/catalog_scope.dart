@@ -7,8 +7,8 @@ import 'package:flutter_work/features/catalog/data/catalog_repository.dart';
 import 'package:flutter_work/features/catalog/models/catalog_model.dart';
 import 'package:scope/scope.dart';
 
-class BasketScope extends StatelessWidget {
-  const BasketScope({required this.child, super.key});
+class CatalogScope extends StatelessWidget {
+  const CatalogScope({required this.child, super.key});
 
   final Widget child;
 
