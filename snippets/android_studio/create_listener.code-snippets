@@ -1,0 +1,32 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:scope/scope.dart';
+
+class $Name$Listener extends StatelessWidget {
+  const $Name$Listener({
+    required this.child,
+    super.key,
+  });
+
+  final Widget child;
+
+  static void _listener(BuildContext context, $Name$State state) {
+    switch (state) {
+      case final $Name$StateSuccess _:
+        {
+
+        }
+      default:
+        null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamListener(
+      listener: _listener,
+      stream: $Name$Scope.streamOf,
+      child: child,
+    );
+  }
+}

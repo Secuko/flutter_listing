@@ -1,0 +1,22 @@
+import 'package:app_network/app_network.dart';
+
+abstract class I$Name$DataSource {
+  Future<List<$Name$Model>> get$Name$();
+}
+
+class $Name$DataSource with HeadersMixin implements I$Name$DataSource {
+  $Name$DataSource({
+    required this.client,
+  });
+
+  final BaseClient client;
+
+  @override
+  Future<List<$Name$Model>> get$Name$() async {
+    final response = await client.get<List<dynamic>>(
+      '',
+    );
+    final cast = response.data!.cast<Map<String, dynamic>>();
+    return cast.map($Name$Model.fromJson).toList();
+  }
+}

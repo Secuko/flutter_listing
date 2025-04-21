@@ -1,0 +1,149 @@
+
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+sealed class $Name$Event {
+  const $Name$Event();
+}
+
+final class $Name$EventLoad extends $Name$Event {
+  const $Name$EventLoad();
+}
+
+final class $Name$EventChangeData extends $Name$Event {
+  $Name$EventChangeData({required this.data});
+
+  final $Name$Model data;
+}
+
+sealed class $Name$State {
+  const $Name$State();
+
+  $Name$Model get data => switch (this) {
+        final $Name$StateIdle state => state.data,
+        final $Name$StateLoading state => state.data,
+        final $Name$StateSuccess state => state.data,
+        final $Name$StateError state => state.data,
+      };
+
+  bool get isSuccess => switch (this) {
+    final $Name$StateSuccess _ => true,
+    _ => false,
+  };
+
+  bool get isLoading => switch (this) {
+        final $Name$StateLoading _ => true,
+        _ => false,
+      };
+
+  bool get isError => switch (this) {
+        final $Name$StateError _ => true,
+        _ => false,
+      };
+
+  String? get error => switch (this) {
+        final $Name$StateError state => state.error,
+        _ => null,
+      };
+
+  NetworkError? get networkError => switch (this) {
+        final $Name$StateError state => state.networkError,
+        _ => null,
+      };
+}
+
+final class $Name$StateIdle extends $Name$State {
+  $Name$StateIdle({required this.data});
+
+  @override
+  final $Name$Model data;
+}
+
+final class $Name$StateLoading extends $Name$State {
+  $Name$StateLoading({required this.data});
+
+  @override
+  final $Name$Model data;
+}
+
+final class $Name$StateSuccess extends $Name$State {
+  $Name$StateSuccess({required this.data});
+
+  @override
+  final $Name$Model data;
+}
+
+final class $Name$StateError extends $Name$State {
+  $Name$StateError({
+    required this.data,
+    this.error,
+    this.networkError,
+  });
+
+  @override
+  final $Name$Model data;
+
+  @override
+  final String? error;
+
+  @override
+  final NetworkError? networkError;
+}
+
+class $Name$Bloc extends Bloc<$Name$Event, $Name$State> {
+  $Name$Bloc({
+    required I$Name$Repository repository,
+  })  : _repository = repository,
+        super($Name$StateIdle(data: $Name$Model.empty())) {
+    on<$Name$Event>(
+      (event, emitter) async => switch (event) {
+        final $Name$EventLoad _ => _load(emitter),
+        final $Name$EventChangeData event => _changeData(event, emitter),
+      },
+    );
+  }
+
+  final I$Name$Repository _repository;
+
+  Future<void> _load(
+    Emitter<$Name$State> emitter,
+  ) async {
+    emitter.call($Name$StateLoading(data: state.data));
+    await _executor(
+      emitter,
+      func: () async {
+        emitter.call($Name$StateSuccess(data: state.data));
+      },
+    );
+  }
+
+  Future<void> _changeData(
+    $Name$EventChangeData event,
+    Emitter<$Name$State> emitter,
+  ) async {
+    emitter.call($Name$StateIdle(data: event.data));
+  }
+
+  Future<void> _executor(
+    Emitter<$Name$State> emitter, {
+    required Future<void> Function() func,
+  }) async {
+    try {
+      await func();
+    } on ResponseError catch (e) {
+      emitter
+        ..call($Name$StateError(networkError: NetworkError.fromError(e), data: state.data))
+        ..call(
+          $Name$StateIdle(data: state.data),
+        );
+      rethrow;
+    } on Object catch (_) {
+      emitter
+        ..call($Name$StateError(data: state.data))
+        ..call(
+          $Name$StateIdle(data: state.data),
+        );
+      rethrow;
+    }
+  }
+}

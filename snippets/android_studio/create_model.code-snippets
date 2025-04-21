@@ -1,0 +1,18 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part '$name$_model.freezed.dart';
+
+part '$name$_model.g.dart';
+
+@freezed
+class $Name$Model with _$$$Name$Model {
+  factory $Name$Model({
+    required String accountId,
+  }) = _$Name$Model;
+
+  factory $Name$Model.fromJson(Map<String, dynamic> json) => _$$$Name$ModelFromJson(json);
+
+  factory $Name$Model.empty() => $Name$Model(accountId: '');
+
+  $Name$Model._();
+}
