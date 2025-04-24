@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scope/scope.dart';
+
+class $Name$Scope extends StatelessWidget {
+  const $Name$Scope({required this.child, super.key});
+
+  final Widget child;
+
+  static const BlocScope<$Name$Event, $Name$State, $Name$Bloc> _scope = BlocScope();
+
+  // --- Data --- //
+
+  static ScopeData<$Name$Model> get data => _scope.select((state) => state.data);
+
+  static ScopeData<String?> get error => _scope.select((state) => state.error);
+
+  static ScopeData<bool> get isLoadingState => _scope.select((state) => state.isLoading);
+
+  static ScopeData<bool> get isSuccessState => _scope.select((state) => state.isSuccess);
+
+  static ScopeData<bool> get isErrorState => _scope.select((state) => state.isError);
+
+  static Stream<$Name$State> streamOf(BuildContext context) => _scope.bloc(context).stream;
+
+  static void load(BuildContext context) {
+    _scope.bloc(context).add(const $Name$EventLoad());
+  }
+
+  static void changeId(BuildContext context, {required int value}) {
+    final _data = data(context);
+    _scope.bloc(context).add(
+          $Name$EventChangeData(
+            data: _data.copyWith(accountId: value),
+          ),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final repositories = DependenciesScope.repositories(context);
+    return BlocProvider(
+      create: (_) => $Name$Bloc(
+        repository: repositories.repository,
+      ),
+      child: child,
+    );
+  }
+}

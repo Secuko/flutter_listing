@@ -1,0 +1,24 @@
+
+abstract class I$Name$Repository {
+  const I$Name$Repository();
+
+  Future<List<$Name$Model>> get$Name$();
+}
+
+class $Name$Repository implements I$Name$Repository {
+  const $Name$Repository({
+    required I$Name$DataSource remoteDataSource,
+    required ILocalStorage localStorage,
+  })  : _remoteDataSource = remoteDataSource,
+        _localStorage = localStorage;
+
+  final I$Name$DataSource _remoteDataSource;
+  final ILocalStorage _localStorage;
+
+  @override
+  Future<List<$Name$Model>> get$Name$() async {
+    final token = _localStorage.getToken()!;
+    final response = await _remoteDataSource.get$Name$(token.accessToken);
+    return response;
+  }
+}
