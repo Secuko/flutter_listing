@@ -58,7 +58,7 @@ class ProfileScope extends StatelessWidget {
     print(
       'Data recieved in saveEdit method: $name, $surname, $lastName, $phone user = $user',
     );
-
+    //добавить листенер, добавил delay
     // Check if the user is null and all fields are empty
     // If so, emit an error event
     if (user == null &&
@@ -77,6 +77,7 @@ class ProfileScope extends StatelessWidget {
       return;
     }
 
+
     if (user != null) {
       name = (user.name != name && name != '') ? name : user.name;
       surname =
@@ -87,6 +88,10 @@ class ProfileScope extends StatelessWidget {
               : user.lastName;
       phone = (user.phone != phone && phone != '') ? phone : user.phone;
     }
+
+    // Future.delayed(const Duration(milliseconds: 2000), () {
+
+    // });
     print('add event EditProfileEventSaveData');
     editBloc.add(
       EditProfileEventSaveData(
