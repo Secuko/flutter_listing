@@ -13,7 +13,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileEvent>(
       (event, emitter) async => switch (event) {
         final ProfileEventLoad _ => _load(emitter),
-        final ProfileEventEditAccount _ => _editAccount(emitter),
         final ProfileEventDeleteAccount _ => _deleteAccount(emitter),
       },
     );
@@ -40,20 +39,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await _executor(
       emitter,
       func: () async {
-        print('call delete user');
         emitter.call(ProfileStateLoading(data: state.data));
+        print('call delete user');
         await _repository.deleteUser();
         print('Profile state success');
-        emitter.call(ProfileStateSuccess(data: state.data));
-        print('Profile state idle');
-        emitter.call(ProfileStateIdle(data: state.data));
+        emitter.call(ProfileStateSuccess(data: state.data.copyWith(user: null)));
+        // print('Profile state idle');
+        // emitter.call(ProfileStateIdle(data: state.data));
       },
     );
   }
 
-  Future<void> _editAccount(Emitter<ProfileState> emitter) async {
-    // emitter.call(ProfileStateIdle(data: event.data));
-  }
 
   Future<void> _executor(
     Emitter<ProfileState> emitter, {

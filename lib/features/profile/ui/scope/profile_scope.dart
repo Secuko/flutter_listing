@@ -114,11 +114,12 @@ class ProfileScope extends StatelessWidget {
 
   static void deleteAccount(BuildContext context) {
     _scope.bloc(context).add(ProfileEventDeleteAccount());
+    _editScope.bloc(context).add(EditProfileEventLoad());
   }
 
-  static void editAccount(BuildContext context) {
-    _scope.bloc(context).add(ProfileEventEditAccount());
-  }
+  // static void editAccount(BuildContext context) {
+  //   _scope.bloc(context).add(ProfileEventEditAccount());
+  // }
 
   static ScopeData<ProfileModel> get data =>
       _scope.select((state) => state.data);

@@ -12,10 +12,6 @@ final class ProfileEventLoad extends ProfileEvent {
 //   const ProfileEventCreateAccount();
 // }
 
-final class ProfileEventEditAccount extends ProfileEvent {
-  const ProfileEventEditAccount();
-}
-
 final class ProfileEventDeleteAccount extends ProfileEvent {}
 
 // final class ProfileEventEdit extends ProfileEvent {

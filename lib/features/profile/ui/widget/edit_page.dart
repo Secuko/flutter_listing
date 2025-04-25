@@ -14,10 +14,10 @@ class _EditPageState extends State<EditPage> {
   late final TextEditingController _surnameController;
   late final TextEditingController _lastNameController;
   late final TextEditingController _phoneController;
-  late final user = ProfileScope.editData(context, listen: true).user;
-  late  final bool isEditError = ProfileScope.isEditError(context, listen: true);
-  late  final String editError =
-        ProfileScope.editError(context, listen: true) ?? 'Ошибка';
+  // late final user = ProfileScope.editData(context, listen: true).user;
+  // late  final bool isEditError = ProfileScope.isEditError(context, listen: true);
+  // late  final String editError =
+  //       ProfileScope.editError(context, listen: true) ?? 'Ошибка';
   // late final User? user;
 
   @override
@@ -61,6 +61,12 @@ class _EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final data = ProfileScope.editData(context, listen: true);
+    final user = data.user;
+    final bool isEditError = ProfileScope.isEditError(context, listen: true);
+    final String editError =
+        ProfileScope.editError(context, listen: true) ?? 'Ошибка';
+    //  final User? user;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Редактировать профиль'),
