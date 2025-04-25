@@ -9,9 +9,14 @@ import 'package:local_storage/local_storage.dart';
 import 'package:scope/scope.dart';
 
 class ProfileScope extends StatelessWidget {
-  const ProfileScope({required this.child, super.key});
+  const ProfileScope({
+    required this.child,
+    required this.localStorage,
+    super.key,
+  });
 
   final Widget child;
+  final ILocalStorage localStorage;
 
   //edit profile bloc
 
@@ -40,18 +45,49 @@ class ProfileScope extends StatelessWidget {
     _editScope.bloc(context).add(const EditProfileEventLoad());
   }
 
-
   static Future<void> saveEdit(
     BuildContext context, {
     required String name,
     required String surname,
     required String lastName,
     required String phone,
+    required User? user,
   }) async {
     final editBloc = _editScope.bloc(context);
     final profileBloc = _scope.bloc(context);
+    print(
+      'Data recieved in saveEdit method: $name, $surname, $lastName, $phone user = $user',
+    );
 
-    // Отправляем событие сохранения
+    // Check if the user is null and all fields are empty
+    // If so, emit an error event
+    if (user == null &&
+        (name.isEmpty ||
+            surname.isEmpty ||
+            lastName.isEmpty ||
+            phone.isEmpty)) {
+      print('Error: Заполните все поля');
+      editBloc.add(const EditProfileEventError(error: 'Заполните все поля'));
+      return;
+    }
+
+    // Check if all fields are empty
+    if (name.isEmpty && surname.isEmpty && lastName.isEmpty && phone.isEmpty) {
+      print('All fields are empty');
+      return;
+    }
+
+    if (user != null) {
+      name = (user.name != name && name != '') ? name : user.name;
+      surname =
+          (user.surname != surname && surname != '') ? surname : user.surname;
+      lastName =
+          (user.lastName != lastName && lastName != '')
+              ? lastName
+              : user.lastName;
+      phone = (user.phone != phone && phone != '') ? phone : user.phone;
+    }
+    print('add event EditProfileEventSaveData');
     editBloc.add(
       EditProfileEventSaveData(
         name: name,
@@ -64,18 +100,7 @@ class ProfileScope extends StatelessWidget {
     await editBloc.saveCompleted.firstWhere((isSuccess) => isSuccess);
 
     profileBloc.add(const ProfileEventLoad());
-
-    // _editScope
-    //     .bloc(context)
-    //     .add(
-    //       EditProfileEventSaveData(
-    //         name: name,
-    //         surname: surname,
-    //         lastName: lastName,
-    //         phone: phone,
-    //       ),
-    //     );
-    // _scope.bloc(context).add(const ProfileEventLoad());
+    //добаавить bloc listener если состояние из isSuccess - попробую
   }
 
   //profile bloc
@@ -121,16 +146,6 @@ class ProfileScope extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // SharedPrefs().init('profile');
-    // final ILocalStorage localStorage = LocalStorage(
-    //   sharedPreferences: SharedPrefs(),
-    //   secureStorage: SecureStorage(),
-    // );
-    final localStorage = LocalStorage(
-      sharedPreferences: SharedPrefs(),
-      secureStorage: SecureStorage(),
-    );
-    initStorage(localStorage);
     final repository = UserRepository(
       remoteDataSource: UserDataSource(localStorage: localStorage),
     );

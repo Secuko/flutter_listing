@@ -21,7 +21,7 @@ sealed class ProfileState {
   };
 
   bool get isUserExists => switch (this) {
-    final ProfileStateIdle state => (state.data.user != null),
+    final ProfileStateSuccess state => (state.data.user != null),
     _ => false,
   };
 

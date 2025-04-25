@@ -14,17 +14,25 @@ class UserDataSource implements IUserDataSource {
 
   @override
   Future<User?> getUser() async {
-    try {
-      final User user = User(
-        name: localStorage.getName(),
-        surname: localStorage.getSurname(),
-        lastName: localStorage.getLastName(),
-        phone: localStorage.getPhone(),
-      );
-      return user;
-    } catch (e) {
+    final name = localStorage.getName();
+    final surname = localStorage.getSurname();
+    final lastName = localStorage.getLastName();
+    final phone = localStorage.getPhone();
+    if (name.isEmpty ||
+        surname.isEmpty ||
+        lastName.isEmpty ||
+        phone.isEmpty) {
       return null;
     }
+    final User user = User(
+      name: name,
+      surname: surname,
+      lastName: lastName,
+      phone: phone,
+    );
+    print('local storage name ${localStorage.getName()}');
+    print('get user in datasource ${user.toString()}');
+    return user;
   }
 
   @override
@@ -34,7 +42,9 @@ class UserDataSource implements IUserDataSource {
 
   @override
   Future<void> saveUser(User user) async {
-    print('Save user ${user.name} ${user.surname} ${user.lastName} ${user.phone}');
+    print(
+      'Save user in db ${user.name} ${user.surname} ${user.lastName} ${user.phone}',
+    );
     await localStorage.setName(str: user.name);
     await localStorage.setSurname(str: user.surname);
     await localStorage.setLastName(str: user.lastName);

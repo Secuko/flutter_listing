@@ -22,6 +22,7 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
   Future<void> init({required String sharedPrefsPrefix}) async {
     await _sharedPreferences.init(sharedPrefsPrefix);
     await _secureStorage.init(sharedPrefsPrefix);
+    // print('local storage has been initialized');
     final isFirstRun = _sharedPreferences.getBool(
       AppKeysSystem.isFirstRun,
     );
@@ -36,15 +37,15 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
     }
   }
 
-  @mustCallSuper
-  Future<void> clearAll() async {
-    await _secureStorage.deleteAll();
-    await _sharedPreferences.deleteAll();
-    await _sharedPreferences.setBool(
-      AppKeysSystem.isFirstRun,
-      value: false,
-    );
-  }
+  // @mustCallSuper
+  // Future<void> clearAll() async {
+  //   await _secureStorage.deleteAll();
+  //   await _sharedPreferences.deleteAll();
+  //   await _sharedPreferences.setBool(
+  //     AppKeysSystem.isFirstRun,
+  //     value: false,
+  //   );
+  // }
 
   IToken? getToken();
 
@@ -88,16 +89,6 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
   }
 
   @mustCallSuper
-  Future<void> setName({
-    required final String str,
-  }) async {
-    await _sharedPreferences.setString(
-      AppKeysSystem.name,
-      str,
-    );
-  }
-
-  @mustCallSuper
   Future<void> setSurname({
     required final String str,
   }) async {
@@ -132,7 +123,19 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
     final res = _sharedPreferences.getString(
       AppKeysSystem.name,
     );
-    return (res == null) ? res.toString() : '';
+    // print(res.toString());
+    return (res == null) ? '' : res;
+  }
+
+  @mustCallSuper
+  Future<void> setName({
+    required final String str,
+  }) async {
+    await _sharedPreferences.setString(
+      AppKeysSystem.name,
+      str,
+    );
+    print(_sharedPreferences.getString(AppKeysSystem.name));
   }
 
   @mustCallSuper
@@ -140,7 +143,7 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
     final res = _sharedPreferences.getString(
       AppKeysSystem.secondName,
     );
-    return (res == null) ? res.toString() : '';
+    return (res == null) ? '' : res;
   }
 
   @mustCallSuper
@@ -148,7 +151,7 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
     final res = _sharedPreferences.getString(
       AppKeysSystem.surname,
     );
-    return (res == null) ? res.toString() : '';
+    return (res == null) ? '' : res;
   }
 
   @mustCallSuper
@@ -156,7 +159,7 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
     final res = _sharedPreferences.getString(
       AppKeysSystem.phone,
     );
-    return (res == null) ? res.toString() : '';
+    return (res == null) ? '' : res;
   }
 
   @mustCallSuper
@@ -173,7 +176,20 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
 
   @mustCallSuper
   Future<void> deleteUser() async {
-    await _sharedPreferences.deleteAll();
+    // await _sharedPreferences.deleteAll();
+    await _sharedPreferences.deleteKey(
+      AppKeysSystem.name,
+    );
+    await _sharedPreferences.deleteKey(
+      AppKeysSystem.surname,
+    );
+    await _sharedPreferences.deleteKey(
+      AppKeysSystem.secondName,
+    );
+    await _sharedPreferences.deleteKey(
+      AppKeysSystem.phone,
+    );
+    print('delete user get called');
   }
 
   @mustCallSuper

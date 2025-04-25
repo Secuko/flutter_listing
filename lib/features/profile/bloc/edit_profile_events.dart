@@ -8,6 +8,12 @@ final class EditProfileEventLoad extends EditProfileEvent {
   const EditProfileEventLoad();
 }
 
+final class EditProfileEventError extends EditProfileEvent {
+  const EditProfileEventError({required this.error});
+
+  final String error;
+}
+
 final class EditProfileEventSaveData extends EditProfileEvent {
   EditProfileEventSaveData({required this.name,required this.surname, required this.lastName, required this.phone});
 

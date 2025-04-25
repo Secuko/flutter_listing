@@ -16,8 +16,8 @@ class ProfilePage extends StatelessWidget {
     final data = ProfileScope.data(context, listen: true);
     final user = data.user;
 
-    print(isUserExists);
-    print(user);
+    print('Profile page user exists: ${isUserExists}');
+    print('Profile page user: ${user}');
 
     void pushToEditPage(BuildContext context) {
       ProfileScope.loadEdit(context);
@@ -42,8 +42,8 @@ class ProfilePage extends StatelessWidget {
                     if (isUserExists) ...[
                       UserInfoCard(
                         firstName: user!.name,
-                        lastName: user.lastName,
                         surname: user.surname,
+                        lastName: user.lastName,
                         phone: user.phone,
                       ),
                       const SizedBox(height: 12),
@@ -140,18 +140,26 @@ class UserInfoCard extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            _buildInfoRow('Имя', firstName),
-            _buildInfoRow('Фамилия', lastName),
-            _buildInfoRow('Отчество', surname),
-            _buildInfoRow('Телефон', phone),
+            BuildInfoRow(label: 'Имя',value:  firstName),
+            BuildInfoRow(label: 'Фамилия',value: surname),
+            BuildInfoRow(label: 'Отчество',value: lastName),
+            BuildInfoRow(label: 'Телефон',value: phone),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
+
+  class BuildInfoRow extends StatelessWidget {
+    const BuildInfoRow({super.key , required this.label, required this.value});
+    final String label;
+    final String value;
+
+    @override
+    Widget build(BuildContext context) {
+      return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
@@ -166,5 +174,5 @@ class UserInfoCard extends StatelessWidget {
         ],
       ),
     );
+    }
   }
-}

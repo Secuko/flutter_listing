@@ -14,16 +14,32 @@ class _EditPageState extends State<EditPage> {
   late final TextEditingController _surnameController;
   late final TextEditingController _lastNameController;
   late final TextEditingController _phoneController;
-  late final User? _user;
+  late final user = ProfileScope.editData(context, listen: true).user;
+  late  final bool isEditError = ProfileScope.isEditError(context, listen: true);
+  late  final String editError =
+        ProfileScope.editError(context, listen: true) ?? 'Ошибка';
+  // late final User? user;
 
   @override
   void initState() {
-    super.initState();
-    _user = ProfileScope.editData(context, listen: false).user;
+    // user = ProfileScope.editData(context, listen: true).user;
+    // isEditError = ProfileScope.isEditError(context, listen: true);
+    // editError = ProfileScope.editError(context, listen: false) ?? 'Ошибка';
     _nameController = TextEditingController();
     _surnameController = TextEditingController();
     _lastNameController = TextEditingController();
     _phoneController = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Обновление данных после инициализации контекста
+    final user = ProfileScope.editData(context, listen: false).user;
+    // _nameController.text = user?.name ?? '';
+    // _surnameController.text = user?.surname ?? '';
+    // _lastNameController.text = user?.lastName ?? '';
+    // _phoneController.text = user?.phone ?? '';
   }
 
   @override
@@ -35,9 +51,8 @@ class _EditPageState extends State<EditPage> {
     super.dispose();
   }
 
-  String _fieldPlaceholder(str, placeholder) {
-    print(_user.toString());
-    if (_user == null || str == null) {
+  String _fieldPlaceholder(user, str, placeholder) {
+    if (user == null || str == null || str.isEmpty) {
       return placeholder;
     } else {
       return str;
@@ -51,14 +66,6 @@ class _EditPageState extends State<EditPage> {
         title: const Text('Редактировать профиль'),
         centerTitle: true,
         backgroundColor: Colors.blue,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -69,27 +76,46 @@ class _EditPageState extends State<EditPage> {
             children: [
               InputField(
                 controller: _nameController,
-                hint: _fieldPlaceholder(_user!.name, 'Имя'),
+                hint: _fieldPlaceholder(user, user?.name, 'Имя'),
               ),
               const SizedBox(height: 12),
-              InputField(controller: _surnameController, hint: 'Surname'),
+              InputField(
+                controller: _surnameController,
+                hint: _fieldPlaceholder(user, user?.surname, 'Фамилия'),
+              ),
               const SizedBox(height: 12),
-              InputField(controller: _lastNameController, hint: 'Last Name'),
+              InputField(
+                controller: _lastNameController,
+                hint: _fieldPlaceholder(user, user?.lastName, 'Отчество'),
+              ),
               const SizedBox(height: 12),
-              InputField(controller: _phoneController, hint: 'Phone'),
+              InputField(
+                controller: _phoneController,
+                hint: _fieldPlaceholder(user, user?.phone, 'Телефон'),
+              ),
               const SizedBox(height: 12),
               SaveButton(
                 onPressed: () {
+                  print('Edit page save button pressed');
                   ProfileScope.saveEdit(
                     context,
                     name: _nameController.text,
                     surname: _surnameController.text,
                     lastName: _lastNameController.text,
                     phone: _phoneController.text,
+                    user: user,
                   );
-                  Navigator.pop(context);
+                  if (!isEditError) {
+                    Navigator.pop(context);
+                  }
+                  print('Edit page error state: ${isEditError}');
                 },
               ),
+              const SizedBox(height: 12),
+              //нужно добаавить поле в котором будет выводится ошибка
+              (isEditError)
+                  ? Text(editError, style: const TextStyle(color: Colors.red))
+                  : const SizedBox.shrink(),
             ],
           ),
         ),

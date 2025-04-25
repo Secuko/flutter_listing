@@ -28,6 +28,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         print('Profile state loading');
         emitter.call(ProfileStateLoading(data: state.data));
         final data = await _repository.getUser();
+        print('Profile bloc loaded user ${data.user.toString()}');
         print('Profile state success');
         emitter.call(ProfileStateSuccess(data: data));
       },
@@ -39,6 +40,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await _executor(
       emitter,
       func: () async {
+        print('call delete user');
+        emitter.call(ProfileStateLoading(data: state.data));
         await _repository.deleteUser();
         print('Profile state success');
         emitter.call(ProfileStateSuccess(data: state.data));

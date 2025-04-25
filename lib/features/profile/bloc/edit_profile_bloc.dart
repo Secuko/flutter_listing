@@ -13,10 +13,10 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       (event, emitter) async => switch (event) {
         final EditProfileEventLoad _ => _load(emitter),
         final EditProfileEventSaveData event => _save(event, emitter),
+        final EditProfileEventError event => _error(event, emitter),
       },
     );
   }
-
 
   final IProfileRepository _repository;
 
@@ -36,6 +36,14 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     );
   }
 
+  Future<void> _error(
+    EditProfileEventError event,
+    Emitter<EditProfileState> emitter,
+  ) async {
+    print('Edit call state error ');
+    emitter.call(EditProfileStateError(data: state.data, error: event.error));
+  }
+
   Future<void> _save(
     EditProfileEventSaveData event,
     Emitter<EditProfileState> emitter,
@@ -47,8 +55,8 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         ProfileModel data = ProfileModel(
           user: User(
             name: event.name,
-            lastName: event.lastName,
             surname: event.surname,
+            lastName: event.lastName,
             phone: event.phone,
           ),
         );

@@ -3,19 +3,30 @@ import 'package:flutter_work/features/catalog/ui/widget/catalog_page.dart';
 import 'package:flutter_work/features/catalog/ui/scope/catalog_scope.dart';
 import 'package:flutter_work/features/profile/ui/scope/profile_scope.dart';
 import 'package:flutter_work/features/profile/ui/widget/profile_page.dart';
+import 'package:local_storage/local_storage.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final localStorage = LocalStorage(
+    sharedPreferences: SharedPrefs(),
+    secureStorage: SecureStorage(),
+  );
+  await localStorage.init(sharedPrefsPrefix: 'Storage');
+
+  runApp(MyApp(localStorage: localStorage));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ILocalStorage localStorage;
+  const MyApp({super.key, required this.localStorage});
 
   @override
   Widget build(BuildContext context) {
     return ProfileScope(
+       localStorage: localStorage,
       child: CatalogScope(
         child: MaterialApp(
           navigatorKey: navigatorKey,
@@ -62,7 +73,8 @@ class _ApplicationWrapperState extends State<ApplicationWrapper> {
             ),
           ],
         ),
-        body: <Widget>[ProductCatalogPage(), ProfilePage()][currentPageIndex],
+        // body: <Widget>[ProductCatalogPage(), ProfilePage()][currentPageIndex],
+        body: <Widget>[Center(), ProfilePage()][currentPageIndex],
       ),
     );
   }
@@ -81,8 +93,8 @@ class _InitializerWidgetState extends State<InitializerWidget> {
   @override
   void initState() {
     super.initState();
-    print('init');
-    CatalogScope.load(context);
+    print('init in initializer widget');
+    // CatalogScope.load(context);
     ProfileScope.load(context);
     ProfileScope.loadEdit(context);
   }
