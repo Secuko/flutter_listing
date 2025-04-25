@@ -189,7 +189,7 @@ abstract class ILocalStorage with ISecureStorageMixin, ISharedStorageMixin {
     await _sharedPreferences.deleteKey(
       AppKeysSystem.phone,
     );
-    print('delete user get called');
+    print('user deleted in storage');
   }
 
   @mustCallSuper

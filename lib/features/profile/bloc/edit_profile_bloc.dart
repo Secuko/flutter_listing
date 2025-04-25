@@ -20,7 +20,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
   final IProfileRepository _repository;
 
-  Stream<bool> get saveCompleted =>
+  Stream<bool> get succesesStateWasCalled =>
       stream.map((state) => state.isSuccess).where((isSuccess) => isSuccess);
 
   Future<void> _load(Emitter<EditProfileState> emitter) async {
@@ -30,6 +30,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         print('Edit state loading');
         emitter.call(EditProfileStateLoading(data: state.data));
         final data = await _repository.getUser();
+        print('Edit bloc loaded user ${data.user}');
         print('Edit state success');
         emitter.call(EditProfileStateSuccess(data: data));
       },

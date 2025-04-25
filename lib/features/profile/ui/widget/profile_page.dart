@@ -17,7 +17,7 @@ class ProfilePage extends StatelessWidget {
     final user = data.user;
 
     print('Profile page user exists: ${isUserExists}');
-    print('Profile page user: ${user}');
+    print('Profile page user: ${data.user}');
 
     void pushToEditPage(BuildContext context) {
       ProfileScope.loadEdit(context);

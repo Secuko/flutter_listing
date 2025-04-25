@@ -97,7 +97,7 @@ class ProfileScope extends StatelessWidget {
       ),
     );
 
-    await editBloc.saveCompleted.firstWhere((isSuccess) => isSuccess);
+    await editBloc.succesesStateWasCalled.firstWhere((isSuccess) => isSuccess);
 
     profileBloc.add(const ProfileEventLoad());
     //добаавить bloc listener если состояние из isSuccess - попробую
@@ -112,8 +112,14 @@ class ProfileScope extends StatelessWidget {
     _scope.bloc(context).add(const ProfileEventLoad());
   }
 
-  static void deleteAccount(BuildContext context) {
-    _scope.bloc(context).add(ProfileEventDeleteAccount());
+  static Future<void> deleteAccount(BuildContext context) async {
+    final editBloc = _editScope.bloc(context);
+    final profileBloc = _scope.bloc(context);
+
+    print('Call delete account event');
+    profileBloc.add(ProfileEventDeleteAccount());
+    await profileBloc.succesesStateWasCalled.firstWhere((isSuccess) => isSuccess);
+    print('Call edit event load');
     _editScope.bloc(context).add(EditProfileEventLoad());
   }
 

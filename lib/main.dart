@@ -73,8 +73,8 @@ class _ApplicationWrapperState extends State<ApplicationWrapper> {
             ),
           ],
         ),
-        body: <Widget>[ProductCatalogPage(), ProfilePage()][currentPageIndex],
-        // body: <Widget>[Center(), ProfilePage()][currentPageIndex],
+        // body: <Widget>[ProductCatalogPage(), ProfilePage()][currentPageIndex],
+        body: <Widget>[Center(), ProfilePage()][currentPageIndex],
       ),
     );
   }
@@ -94,7 +94,7 @@ class _InitializerWidgetState extends State<InitializerWidget> {
   void initState() {
     super.initState();
     print('init in initializer widget');
-    CatalogScope.load(context);
+    // CatalogScope.load(context);
     ProfileScope.load(context);
     ProfileScope.loadEdit(context);
   }

@@ -20,6 +20,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   final IProfileRepository _repository;
 
+  Stream<bool> get succesesStateWasCalled =>
+      stream.map((state) => state.isSuccess).where((isSuccess) => isSuccess);
+
   Future<void> _load(Emitter<ProfileState> emitter) async {
     await _executor(
       emitter,
@@ -40,7 +43,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emitter,
       func: () async {
         emitter.call(ProfileStateLoading(data: state.data));
-        print('call delete user');
+        print('Call method delete user');
         await _repository.deleteUser();
         print('Profile state success');
         emitter.call(ProfileStateSuccess(data: state.data.copyWith(user: null)));

@@ -18,13 +18,14 @@ class UserRepository implements IProfileRepository {
   Future<ProfileModel> getUser() async {
     final user = await _remoteDataSource.getUser();
 
-    print(user.toString());
-
     if (user == null) {
-      throw Exception('Пользователь не найден');
+      // throw Exception('Пользователь не найден');
+      return ProfileModel.empty();
     }
 
     return ProfileModel(user: user);
+
+    // return ProfileModel(user: user);
   }
 
   @override
