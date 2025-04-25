@@ -41,8 +41,9 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     EditProfileEventError event,
     Emitter<EditProfileState> emitter,
   ) async {
-    print('Edit call state error ');
+    print('Bloc call state error ');
     emitter.call(EditProfileStateError(data: state.data, error: event.error));
+    print('Bloc new state of error ${state.isError}');
   }
 
   Future<void> _save(

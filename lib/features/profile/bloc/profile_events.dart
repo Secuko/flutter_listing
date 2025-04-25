@@ -12,7 +12,9 @@ final class ProfileEventLoad extends ProfileEvent {
 //   const ProfileEventCreateAccount();
 // }
 
-final class ProfileEventDeleteAccount extends ProfileEvent {}
+final class ProfileEventDeleteAccount extends ProfileEvent {
+  const ProfileEventDeleteAccount();
+}
 
 // final class ProfileEventEdit extends ProfileEvent {
 //   const ProfileEventEdit();

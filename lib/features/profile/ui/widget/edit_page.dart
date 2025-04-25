@@ -101,9 +101,9 @@ class _EditPageState extends State<EditPage> {
               ),
               const SizedBox(height: 12),
               SaveButton(
-                onPressed: () {
+                onPressed: () async {
                   print('Edit page save button pressed');
-                  ProfileScope.saveEdit(
+                  await ProfileScope.saveEdit(
                     context,
                     name: _nameController.text,
                     surname: _surnameController.text,
@@ -111,14 +111,19 @@ class _EditPageState extends State<EditPage> {
                     phone: _phoneController.text,
                     user: user,
                   );
-                  if (!isEditError) {
-                    Navigator.pop(context);
-                  }
-                  print('Edit page error state: ${isEditError}');
+                  setState(() {
+                    final isEditError = ProfileScope.isEditError(
+                      context,
+                      listen: false,
+                    );
+                    if (!isEditError) {
+                      Navigator.pop(context);
+                    }
+                  });
+                  print('Edit page error state: $isEditError');
                 },
               ),
               const SizedBox(height: 12),
-              //нужно добаавить поле в котором будет выводится ошибка
               (isEditError)
                   ? Text(editError, style: const TextStyle(color: Colors.red))
                   : const SizedBox.shrink(),
